@@ -16,7 +16,7 @@ file(GLOB gst_SRC
 )
 
 #add_library(my_lib LowPassFilter.cpp)
-add_executable(tx-gst src/Sender.cpp ${gst_SRC})
+add_executable(tx-gst src/Sender.cpp ${gst_SRC} src/webcam.cpp)
 add_executable(rx-gst src/Receiver.cpp ${gst_SRC})
 
 target_link_libraries(tx-gst ${OpenCV_LIBS})
