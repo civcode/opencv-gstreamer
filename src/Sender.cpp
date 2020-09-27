@@ -40,12 +40,12 @@ int main()
         //"appsrc ! videoconvert ! video/x-raw,framerate=60/1,width=640,height=480 ! videoscale ! videoconvert ! clockoverlay ! omxh265enc ! rtph265pay config-interval=1 pt=96 ! gdppay ! tcpserversink host=192.168.0.24 port=7000",
         gst_pipeling.str(),
         0,		// fourcc 
-		60,		// fps
-		Size(640, 480), 
-		true);	// isColor
+        60,		// fps
+        Size(640, 480), 
+        true);	// isColor
 
     if (!writer.isOpened()) {
-        cerr <<"VideoWriter not opened"<<endl;
+        cerr << "VideoWriter not opened" << endl;
         exit(-1);
     }
 
