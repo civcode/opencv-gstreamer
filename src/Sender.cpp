@@ -7,6 +7,7 @@
 */
 
 #include "pch.h"
+#include <gflags/gflags.h>
 
 #include <opencv2/opencv.hpp>
 using namespace cv;
@@ -18,8 +19,16 @@ const string k_host_name = "xavier.local";
 const uint k_host_port = 7000;
 const uint k_host_fps = 60;
 
-int main()
+// command line parameters
+DEFINE_string(host, "xavier.local", "Hostname or IP of the transmitter.");
+DEFINE_int32(port, 7000, "TCP port for transmission.");
+
+int main(int argc, char **argv)
 {
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    cout << "Connection: " << FLAGS_host << ":" << FLAGS_port << endl;
+
     VideoCapture cap(0);
 	
     if (!cap.isOpened()) {
@@ -31,7 +40,7 @@ int main()
     //sprintf(buffer, "appsrc ! videoconvert ! video/x-raw,framerate=%d/1,width=640,height=480 ! videoscale ! videoconvert ! clockoverlay ! omxh265enc ! rtph265pay config-interval=1 pt=96 ! gdppay ! tcpserversink host=%s port=7000",
  
     ostringstream gst_pipeling;
-    gst_pipeling << "appsrc ! videoconvert ! video/x-raw,framerate=" << k_host_fps << "/1,width=640,height=480 ! videoscale ! videoconvert ! clockoverlay ! omxh265enc ! rtph265pay config-interval=1 pt=96 ! gdppay ! tcpserversink host=" << k_host_name << " port=" << k_host_port; // << "\"";
+    gst_pipeling << "appsrc ! videoconvert ! video/x-raw,framerate=" << k_host_fps << "/1,width=640,height=480 ! videoscale ! videoconvert ! clockoverlay ! omxh265enc ! rtph265pay config-interval=1 pt=96 ! gdppay ! tcpserversink host=" << FLAGS_host << " port=" << FLAGS_port; // << "\"";
  
     cout << "\n" << gst_pipeling.str() << endl;
 

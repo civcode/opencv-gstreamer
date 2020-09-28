@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.9)
 project(gst)
 
 find_package(OpenCV REQUIRED)
+find_package(gflags REQUIRED)
 
 # add include directories
 include_directories(
@@ -19,6 +20,6 @@ file(GLOB gst_SRC
 add_executable(tx-gst src/Sender.cpp ${gst_SRC})
 add_executable(rx-gst src/Receiver.cpp ${gst_SRC})
 
-target_link_libraries(tx-gst ${OpenCV_LIBS})
-target_link_libraries(rx-gst ${OpenCV_LIBS})
+target_link_libraries(tx-gst ${OpenCV_LIBS} gflags)
+target_link_libraries(rx-gst ${OpenCV_LIBS} gflags)
 

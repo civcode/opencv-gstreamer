@@ -7,6 +7,7 @@
 */
 
 #include "pch.h"
+#include <gflags/gflags.h>
 
 #include <opencv2/opencv.hpp>
 using namespace cv;
@@ -18,7 +19,11 @@ const string k_host_name = "xavier.local";
 const uint k_host_port = 7000;
 const uint k_host_fps = 60;
 
-int main()
+// command line parameters
+DEFINE_string(host, "xavier.local", "Hostname or IP of the transmitter.");
+DEFINE_int32(port, 7000, "TCP port for transmission.");
+
+int main(int argc, char **argv)
 {
     // The sink caps for the 'rtpjpegdepay' need to match the src caps of the 'rtpjpegpay' of the sender pipeline
     // Added 'videoconvert' at the end to convert the images into proper format for appsink, without
@@ -27,9 +32,14 @@ int main()
 	//VideoCapture cap("udpsrc port=5000 ! application/x-rtp,media=video,payload=26,clock-rate=90000,encoding-name=JPEG,framerate=30/1 ! rtpjpegdepay ! jpegdec ! videoconvert ! appsink", 
  //           CAP_GSTREAMER);
 
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    cout << "Connection: " << FLAGS_host << ":" << FLAGS_port << endl;
+
     ostringstream gst_pipeline;
 
-    gst_pipeline << "tcpclientsrc host=" << k_host_name << " port=" << k_host_port << " ! gdpdepay ! rtph265depay ! avdec_h265 ! videoconvert ! appsink";
+    //gst_pipeline << "tcpclientsrc host=" << k_host_name << " port=" << k_host_port << " ! gdpdepay ! rtph265depay ! avdec_h265 ! videoconvert ! appsink";
+    gst_pipeline << "tcpclientsrc host=" << FLAGS_host << " port=" << FLAGS_port << " ! gdpdepay ! rtph265depay ! avdec_h265 ! nvvidconv ! appsink";
 
 	VideoCapture cap(gst_pipeline.str(), CAP_GSTREAMER);
     
