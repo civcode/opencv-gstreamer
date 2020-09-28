@@ -15,7 +15,7 @@ using namespace cv;
 #include <iostream>
 using namespace std;
 
-const string k_host_name = "xavier.local";
+const string k_host_name = "nano.local";
 const uint k_host_port = 7000;
 const uint k_host_fps = 60;
 
